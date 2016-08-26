@@ -1,0 +1,35 @@
+<h1><%=@group.name%></h1>
+<p><%=@group.description%></p>
+	<!-- <form action='/joins' method='post'>
+		<input type='hidden' name='authenticity_token' value='<%= form_authenticity_token %>'>
+		<input type='hidden' name='group_id' value='<%=@group.id %>'>
+		<input type='submit' value='Join Group'>
+	</form> -->
+	<% if Join.find_by(user_id: session[:user_id], group_id: @group.id) == nil %>
+		<form action="/joins" method="post">
+			<input type="hidden" name="authenticity_token" value="<%=form_authenticity_token%>">
+			<input type="hidden" name="group_id" value="<%=@group.id%>">
+			<input type="submit" Value="Join Group">
+		</form>
+	<%else%>
+		<form action='/joins' method='post'>
+			<input type="hidden" name="_method" value="delete">
+			<input type='hidden' name='authenticity_token' value='<%= form_authenticity_token %>'>
+			<input type='hidden' name='group_id' value='<%=@group.id %>'>
+			<input type='submit' value='UnJoin Group'>
+		</form>
+	<%end%>
+
+	<% if !Group.find_by(user_id: session[:user_id])%>
+		<p>Owner: <%=@owner.first_name%></p>
+	<%else%>
+		<p>Owner: You</p>
+	<%end%>
+
+
+	<p>People going:</p>
+
+	<%@members.each do |g|%>
+		<p><%=g.first_name%></p>
+	<%end%>
+

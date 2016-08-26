@@ -1,0 +1,39 @@
+<h1><%=@user.first_name%></h1>
+<div id='join_event'>
+	<h4>Here are the organization you may join:</h4>
+	<% @groups.each do |group|%>
+		<% if group.user_id == session[:user_id]%>
+			<div>
+				<a href="/groups/<%=group.id%>"><%=group.name%></a>
+				<p><%=group.description%></p>
+				<p><%=group.joins.count%>: Members</p>
+				<form action='/groups' method="post">
+					<input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+					<input type="hidden" name="_method" value="delete">
+					<input type="hidden" name="group_id" value="<%=group.id%>">
+					<input type="submit" value="Delete Group">
+				</form>
+			</div>
+		<%else%>
+			<div>
+				<a href="/groups/<%=group.id%>"><%=group.name%></a>
+				<p><%=group.description%></p>
+				<p><%=group.joins.count%>: Members</p>
+
+			</div>
+		<%end%>
+	<br>
+	<%end%>
+</div>
+
+<div id='create_group'>
+	<h3>Create a new Organization!</h3>
+<form action='/groups' method='post'>
+	<input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+	<input type='hidden' name='user_id' value="<%= @user.id %>">
+	<p>Org Name: <input type='text' name='name'></p>
+	<p>Description: <input type='text' name='description'></p>
+	<p><input type='submit' value='Submit'>
+</form>
+</div>
+
